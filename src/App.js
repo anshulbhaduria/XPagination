@@ -15,9 +15,9 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_URL);
-        setData(response.data);
-      } catch (error) {
+        const res = await axios.get(API_URL);
+        setData(res.data);
+      } catch (err) {
         alert("failed to fetch data");
       }
     };
@@ -25,13 +25,21 @@ const App = () => {
   }, []);
 
   const totalPages = Math.ceil(data.length / PAGE_SIZE);
+
   const startIdx = (currentPage - 1) * PAGE_SIZE;
   const currentData = data.slice(startIdx, startIdx + PAGE_SIZE);
 
-  const goNext = () =>
-    currentPage < totalPages && setCurrentPage((prev) => prev + 1);
-  const goPrevious = () =>
-    currentPage > 1 && setCurrentPage((prev) => prev - 1);
+  const goNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((p) => p + 1);
+    }
+  };
+
+  const goPrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage((p) => p - 1);
+    }
+  };
 
   return (
     <div className={styles.container}>
